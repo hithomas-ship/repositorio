@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico 2: Ranking Dinámico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #0b0f19; color: #f8fafc; }
+        .card-dark { background-color: #111827; border: 1px solid #1f2937; }
+    </style>
+</head>
+<body class="font-sans antialiased p-4">
+    <div class="max-w-3xl mx-auto card-dark p-6 rounded-2xl shadow-xl">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+            <div>
+                <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Paso 2</span>
+                <h3 class="text-lg font-bold text-white mt-1">¿Cómo son esas comunas? Ranking Dinámico</h3>
+            </div>
+            <div>
+                <select id="varSelectorStep2" onchange="updateRankingChart()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-2 font-medium">
+                    <option value="poblacion">Población Comunal (Habitantes)</option>
+                    <option value="pobreza">Pobreza por Ingresos (%)</option>
+                    <option value="densidad">Densidad (Hab/km²)</option>
+                </select>
+            </div>
+        </div>
+        <div class="relative h-72 w-full">
+            <canvas id="canvasRanking"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const rankingData = {
+            poblacion: { label: 'Población Comunal (Habitantes)', values: [520000, 402000, 250000, 210000, 130000, 116000, 100000, 98000, 82000, 80000], labels: ['Maipú', 'La Florida', 'Ñuñoa', 'Quilicura', 'Conchalí', 'La Granja', 'La Cisterna', 'Lo Espejo', 'San Ramón', 'Cerrillos'], color: '#38bdf8' },
+            pobreza: { label: 'Pobreza por Ingresos (%)', values: [13.8, 12.4, 11.5, 9.2, 9.1, 8.5, 8.1, 7.3, 6.5, 3.4], labels: ['San Ramón', 'Lo Espejo', 'La Granja', 'Conchalí', 'La Cisterna', 'Cerrillos', 'Santiago', 'Maipú', 'Quilicura', 'Ñuñoa'], color: '#ef4444' },
+            densidad: { label: 'Densidad (Hab/km²)', values: [13500, 13200, 11900, 11500, 10200, 9800, 3800, 3500, 3100, 2800], labels: ['La Florida', 'Lo Espejo', 'Maipú', 'San Ramón', 'Conchalí', 'La Cisterna', 'Cerrillos', 'Quilicura', 'Ñuñoa', 'La Reina'], color: '#a855f7' }
+        };
+
+        const ctxRanking = document.getElementById('canvasRanking').getContext('2d');
+        let chartRanking = new Chart(ctxRanking, {
+            type: 'bar',
+            data: {
+                labels: rankingData.poblacion.labels,
+                datasets: [{ label: rankingData.poblacion.label, data: rankingData.poblacion.values, backgroundColor: rankingData.poblacion.color, borderRadius: 6 }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } },
+                    y: { grid: { display: false }, ticks: { color: '#f8fafc', font: { size: 11 } } }
+                }
+            }
+        });
+
+        function updateRankingChart() {
+            const sel = document.getElementById('varSelectorStep2').value;
+            const d = rankingData[sel];
+            chartRanking.data.labels = d.labels;
+            chartRanking.data.datasets[0].label = d.label;
+            chartRanking.data.datasets[0].data = d.values;
+            chartRanking.data.datasets[0].backgroundColor = d.color;
+            chartRanking.update();
+        }
+    </script>
+</body>
+</html>
