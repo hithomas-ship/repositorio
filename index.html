@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos Metro de Santiago</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .tab-active {
+            border-bottom: 3px solid #ef4444;
+            color: #ef4444;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased m-0 p-4">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Navegación por pestañas (Tabs) -->
+        <div class="flex justify-center border-b border-slate-200 mb-6 space-x-6 text-xs md:text-sm">
+            <button onclick="switchTab('chart1')" id="btn-chart1" class="tab-active pb-2 focus:outline-none transition-colors">1. Línea 3 (Población)</button>
+            <button onclick="switchTab('chart2')" id="btn-chart2" class="pb-2 text-slate-500 hover:text-slate-800 focus:outline-none transition-colors">2. Línea 10 (Variables)</button>
+            <button onclick="switchTab('chart3')" id="btn-chart3" class="pb-2 text-slate-500 hover:text-slate-800 focus:outline-none transition-colors">3. Tiempos de Viaje</button>
+        </div>
+
+        <!-- CONTENEDOR GRÁFICO 1 -->
+        <div id="section-chart1" class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
+            <h3 class="text-lg font-bold text-slate-900">Línea 3: Población y Conectividad Previa</h3>
+            <p class="text-xs md:text-sm text-slate-500 mt-1 mb-4">Comparación entre población total comunal y población beneficiada (Censo INE).</p>
+            <div class="relative h-72 w-full"><canvas id="canvasChart1"></canvas></div>
+        </div>
+
+        <!-- CONTENEDOR GRÁFICO 2 -->
+        <div id="section-chart2" class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 mb-6 hidden">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Línea 10: Radiografía Socioterritorial</h3>
+                    <p class="text-xs md:text-sm text-slate-500 mt-1">Selecciona una variable social:</p>
+                </div>
+                <select id="variableSelector" onchange="updateChart2()" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg p-2 font-medium">
+                    <option value="pobrezaIngresos">Pobreza por Ingresos (%)</option>
+                    <option value="pobrezaMulti">Pobreza Multidimensional (%)</option>
+                    <option value="poblacion">Población Total (Habitantes)</option>
+                    <option value="densidad">Densidad Poblacional (Hab/km²)</option>
+                </select>
+            </div>
+            <div class="relative h-72 w-full"><canvas id="canvasChart2"></canvas></div>
+        </div>
+
+        <!-- CONTENEDOR GRÁFICO 3 -->
+        <div id="section-chart3" class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 mb-6 hidden">
+            <h3 class="text-lg font-bold text-slate-900">El Costo Social del Tiempo: Antes vs. Con Metro</h3>
+            <p class="text-xs md:text-sm text-slate-500 mt-1 mb-4">Estimación de tiempos de viaje actuales vs. proyectados.</p>
+            <div class="relative h-72 w-full"><canvas id="canvasChart3"></canvas></div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            ['chart1', 'chart2', 'chart3'].forEach(id => {
+                document.getElementById('section-' + id).classList.add('hidden');
+                document.getElementById('btn-' + id).classList.remove('tab-active', 'text-slate-900', 'font-semibold');
+                document.getElementById('btn-' + id).classList.add('text-slate-500');
+            });
+            document.getElementById('section-' + tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId).classList.add('tab-active', 'text-slate-900', 'font-semibold');
+            document.getElementById('btn-' + tabId).classList.remove('text-slate-500');
+        }
+
+        // Gráfico 1
+        new Chart(document.getElementById('canvasChart1').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Quilicura', 'Conchalí', 'Santiago', 'Ñuñoa', 'La Reina'],
+                datasets: [
+                    { label: 'Población Total', data: [210000, 130000, 500000, 250000, 100000], backgroundColor: '#cbd5e1', borderRadius: 6 },
+                    { label: 'Beneficiada', data: [190000, 125000, 350000, 180000, 70000], backgroundColor: '#dc2626', borderRadius: 6 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // Gráfico 2
+        const comunasL10 = ['La Florida', 'La Granja', 'San Ramón', 'La Cisterna', 'Lo Espejo', 'Cerrillos', 'Maipú'];
+        const dataL10 = {
+            pobrezaIngresos: { label: 'Pobreza por Ingresos (%)', values: [6.2, 11.5, 13.8, 9.1, 12.4, 8.5, 7.3], color: '#ef4444' },
+            pobrezaMulti: { label: 'Pobreza Multidimensional (%)', values: [15.2, 22.4, 24.1, 18.5, 23.0, 17.2, 16.1], color: '#f97316' },
+            poblacion: { label: 'Población Comunal (Miles)', values: [402, 116, 82, 100, 98, 80, 520], color: '#3b82f6' },
+            densidad: { label: 'Densidad Poblacional (Hab/km²)', values: [13500, 10200, 11500, 9800, 13200, 3800, 11900], color: '#8b5cf6' }
+        };
+        let chart2 = new Chart(document.getElementById('canvasChart2').getContext('2d'), {
+            type: 'bar',
+            data: { labels: comunasL10, datasets: [{ label: dataL10.pobrezaIngresos.label, data: dataL10.pobrezaIngresos.values, backgroundColor: dataL10.pobrezaIngresos.color, borderRadius: 6 }] },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+        function updateChart2() {
+            const v = document.getElementById('variableSelector').value;
+            chart2.data.datasets[0].label = dataL10[v].label;
+            chart2.data.datasets[0].data = dataL10[v].values;
+            chart2.data.datasets[0].backgroundColor = dataL10[v].color;
+            chart2.update();
+        }
+
+        // Gráfico 3
+        new Chart(document.getElementById('canvasChart3').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Quilicura -> Stgo Centro', 'Conchalí -> Providencia', 'Maipú -> La Florida', 'San Ramón -> Zona Oriente'],
+                datasets: [
+                    { label: 'Tiempo Actual (Bus + Metro)', data: [65, 50, 75, 70], backgroundColor: '#94a3b8', borderRadius: 6 },
+                    { label: 'Tiempo Proyectado', data: [35, 28, 45, 40], backgroundColor: '#0ea5e9', borderRadius: 6 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        });
+    </script>
+</body>
+</html>
