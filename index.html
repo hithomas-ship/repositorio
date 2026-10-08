@@ -3,117 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gráficos Metro de Santiago</title>
+    <title>Más que kilómetros: Secuencia Interactiva</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para interactividad -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .tab-active {
-            border-bottom: 3px solid #ef4444;
-            color: #ef4444;
-            font-weight: 600;
-        }
+        body { background-color: #0b0f19; color: #f8fafc; }
+        .card-dark { background-color: #111827; border: 1px solid #1f2937; }
+        .tab-active { background-color: #ef4444; color: #ffffff; font-weight: 600; }
+        .tab-inactive { background-color: #1f2937; color: #9ca3af; }
+        .tab-inactive:hover { background-color: #374151; color: #ffffff; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased m-0 p-4">
+<body class="font-sans antialiased px-4 py-8">
 
     <div class="max-w-4xl mx-auto">
-        <!-- Navegación por pestañas (Tabs) -->
-        <div class="flex justify-center border-b border-slate-200 mb-6 space-x-6 text-xs md:text-sm">
-            <button onclick="switchTab('chart1')" id="btn-chart1" class="tab-active pb-2 focus:outline-none transition-colors">1. Línea 3 (Población)</button>
-            <button onclick="switchTab('chart2')" id="btn-chart2" class="pb-2 text-slate-500 hover:text-slate-800 focus:outline-none transition-colors">2. Línea 10 (Variables)</button>
-            <button onclick="switchTab('chart3')" id="btn-chart3" class="pb-2 text-slate-500 hover:text-slate-800 focus:outline-none transition-colors">3. Tiempos de Viaje</button>
+        <!-- Encabezado de la Secuencia -->
+        <header class="mb-8 text-center">
+            <span class="text-xs font-bold uppercase tracking-widest text-red-400 bg-red-950/50 border border-red-800/50 px-3 py-1 rounded-full">Secuencia Periodística Interactiva</span>
+            <h1 class="text-2xl md:text-3xl font-extrabold mt-3 text-white">Territorio, Población y Expansión del Metro</h1>
+            <p class="text-slate-400 text-sm mt-2 max-w-xl mx-auto">Explora cómo las líneas conectan realidades sociales y comunas con diferentes niveles de necesidad.</p>
+        </header>
+
+        <!-- Navegación de la Secuencia Narrativa -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+            <button onclick="switchStep(1)" id="btn-step1" class="tab-active px-4 py-2 rounded-xl text-xs md:text-sm transition-all focus:outline-none">1. Mapa de Conexión</button>
+            <button onclick="switchStep(2)" id="btn-step2" class="tab-inactive px-4 py-2 rounded-xl text-xs md:text-sm transition-all focus:outline-none">2. Ranking Socioterritorial</button>
+            <button onclick="switchStep(3)" id="btn-step3" class="tab-inactive px-4 py-2 rounded-xl text-xs md:text-sm transition-all focus:outline-none">3. Análisis Cruzado (Scatter)</button>
         </div>
 
-        <!-- CONTENEDOR GRÁFICO 1 -->
-        <div id="section-chart1" class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-            <h3 class="text-lg font-bold text-slate-900">Línea 3: Población y Conectividad Previa</h3>
-            <p class="text-xs md:text-sm text-slate-500 mt-1 mb-4">Comparación entre población total comunal y población beneficiada (Censo INE).</p>
-            <div class="relative h-72 w-full"><canvas id="canvasChart1"></canvas></div>
-        </div>
-
-        <!-- CONTENEDOR GRÁFICO 2 -->
-        <div id="section-chart2" class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 mb-6 hidden">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
-                <div>
-                    <h3 class="text-lg font-bold text-slate-900">Línea 10: Radiografía Socioterritorial</h3>
-                    <p class="text-xs md:text-sm text-slate-500 mt-1">Selecciona una variable social:</p>
-                </div>
-                <select id="variableSelector" onchange="updateChart2()" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs rounded-lg p-2 font-medium">
-                    <option value="pobrezaIngresos">Pobreza por Ingresos (%)</option>
-                    <option value="pobrezaMulti">Pobreza Multidimensional (%)</option>
-                    <option value="poblacion">Población Total (Habitantes)</option>
-                    <option value="densidad">Densidad Poblacional (Hab/km²)</option>
-                </select>
+        <!-- PASO 1: MAPA DE TRAYECTO INTERACTIVO -->
+        <div id="step-1" class="card-dark p-6 rounded-2xl shadow-xl mb-8">
+            <div class="mb-4">
+                <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Paso 1 de 3</span>
+                <h3 class="text-xl font-bold text-white mt-1">¿Dónde llega el Metro? Comunas y Trazados</h3>
+                <p class="text-xs text-slate-400 mt-1">Selecciona una línea para visualizar las comunas que atraviesa y haz clic para ver su contexto.</p>
             </div>
-            <div class="relative h-72 w-full"><canvas id="canvasChart2"></canvas></div>
+            
+            <div class="flex gap-3 mb-6">
+                <button onclick="filterLine('L3')" id="btn-l3" class="px-4 py-2 bg-red-600 text-white font-semibold text-xs rounded-lg transition-all shadow-md">Línea 3 (Operativa)</button>
+                <button onclick="filterLine('L10')" id="btn-l10" class="px-4 py-2 bg-slate-800 text-slate-300 font-semibold text-xs rounded-lg transition-all border border-slate-700">Línea 10 (Proyectada)</button>
+            </div>
+
+            <!-- Tarjetas interactivas de comunas -->
+            <div id="comunasContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
+                <!-- Se llena dinámicamente con JS -->
+            </div>
+
+            <!-- Panel de detalle de la comuna seleccionada -->
+            <div id="comunaDetail" class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl text-sm">
+                <span class="text-slate-500 text-xs italic">Haz clic en cualquier comuna arriba para desplegar sus datos del Censo y caracterización social.</span>
+            </div>
         </div>
 
-        <!-- CONTENEDOR GRÁFICO 3 -->
-        <div id="section-chart3" class="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 mb-6 hidden">
-            <h3 class="text-lg font-bold text-slate-900">El Costo Social del Tiempo: Antes vs. Con Metro</h3>
-            <p class="text-xs md:text-sm text-slate-500 mt-1 mb-4">Estimación de tiempos de viaje actuales vs. proyectados.</p>
-            <div class="relative h-72 w-full"><canvas id="canvasChart3"></canvas></div>
+        <!-- PASO 2: RANKING INTERACTIVO MULTIVARIABLE -->
+        <div id="step-2" class="card-dark p-6 rounded-2xl shadow-xl mb-8 hidden">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                <div>
+                    <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Paso 2 de 3</span>
+                    <h3 class="text-xl font-bold text-white mt-1">¿Cómo son esas comunas? Ranking Dinámico</h3>
+                    <p class="text-xs text-slate-400 mt-1">Cambia la variable para ordenar el territorio según población, pobreza o densidad.</p>
+                </div>
+                <div>
+                    <select id="varSelectorStep2" onchange="updateRankingChart()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-2.5 font-medium focus:ring-red-500 focus:border-red-500">
+                        <option value="poblacion">Población Comunal (Habitantes)</option>
+                        <option value="pobreza">Pobreza por Ingresos (%)</option>
+                        <option value="densidad">Densidad (Hab/km²)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="relative h-72 md:h-80 w-full">
+                <canvas id="canvasRanking"></canvas>
+            </div>
+        </div>
+
+        <!-- PASO 3: SCATTER PLOT (CRUCE DE NECESIDAD VS POBLACIÓN) -->
+        <div id="step-3" class="card-dark p-6 rounded-2xl shadow-xl mb-8 hidden">
+            <div class="mb-4">
+                <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Paso 3 de 3</span>
+                <h3 class="text-xl font-bold text-white mt-1">¿Dónde está la mayor necesidad?</h3>
+                <p class="text-xs text-slate-400 mt-1">Relación analítica: Población (Eje X) vs. Porcentaje de Pobreza por Ingresos (Eje Y) por comuna.</p>
+            </div>
+            <div class="relative h-72 md:h-80 w-full">
+                <canvas id="canvasScatter"></canvas>
+            </div>
+            <div class="mt-4 p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-xs text-slate-400">
+                <strong>Análisis periodístico:</strong> Permite observar si las grandes inversiones se concentran en zonas altamente pobladas con mayores índices de vulnerabilidad social.
+            </div>
         </div>
     </div>
 
     <script>
-        function switchTab(tabId) {
-            ['chart1', 'chart2', 'chart3'].forEach(id => {
-                document.getElementById('section-' + id).classList.add('hidden');
-                document.getElementById('btn-' + id).classList.remove('tab-active', 'text-slate-900', 'font-semibold');
-                document.getElementById('btn-' + id).classList.add('text-slate-500');
+        // --- CONTROL DE SECUENCIA (STEPS) ---
+        function switchStep(stepNum) {
+            [1, 2, 3].forEach(i => {
+                document.getElementById('step-' + i).classList.add('hidden');
+                document.getElementById('btn-step' + i).className = "tab-inactive px-4 py-2 rounded-xl text-xs md:text-sm transition-all focus:outline-none";
             });
-            document.getElementById('section-' + tabId).classList.remove('hidden');
-            document.getElementById('btn-' + tabId).classList.add('tab-active', 'text-slate-900', 'font-semibold');
-            document.getElementById('btn-' + tabId).classList.remove('text-slate-500');
+            document.getElementById('step-' + stepNum).classList.remove('hidden');
+            document.getElementById('btn-step' + stepNum).className = "tab-active px-4 py-2 rounded-xl text-xs md:text-sm transition-all focus:outline-none shadow-md";
         }
 
-        // Gráfico 1
-        new Chart(document.getElementById('canvasChart1').getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Quilicura', 'Conchalí', 'Santiago', 'Ñuñoa', 'La Reina'],
-                datasets: [
-                    { label: 'Población Total', data: [210000, 130000, 500000, 250000, 100000], backgroundColor: '#cbd5e1', borderRadius: 6 },
-                    { label: 'Beneficiada', data: [190000, 125000, 350000, 180000, 70000], backgroundColor: '#dc2626', borderRadius: 6 }
-                ]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-        });
-
-        // Gráfico 2
-        const comunasL10 = ['La Florida', 'La Granja', 'San Ramón', 'La Cisterna', 'Lo Espejo', 'Cerrillos', 'Maipú'];
-        const dataL10 = {
-            pobrezaIngresos: { label: 'Pobreza por Ingresos (%)', values: [6.2, 11.5, 13.8, 9.1, 12.4, 8.5, 7.3], color: '#ef4444' },
-            pobrezaMulti: { label: 'Pobreza Multidimensional (%)', values: [15.2, 22.4, 24.1, 18.5, 23.0, 17.2, 16.1], color: '#f97316' },
-            poblacion: { label: 'Población Comunal (Miles)', values: [402, 116, 82, 100, 98, 80, 520], color: '#3b82f6' },
-            densidad: { label: 'Densidad Poblacional (Hab/km²)', values: [13500, 10200, 11500, 9800, 13200, 3800, 11900], color: '#8b5cf6' }
+        // --- DATOS PASO 1: MAPA / FICHAS DE COMUNAS ---
+        const datosComunas = {
+            L3: [
+                { nombre: 'Quilicura', pop: '210.000 hab', pobreza: '6.5%', estado: 'Nueva Conexión (L3)', desc: 'Recibió su primera conexión directa de alta capacidad al sistema.' },
+                { nombre: 'Conchalí', pop: '130.000 hab', pobreza: '9.2%', estado: 'Nueva Conexión (L3)', desc: 'Integra sectores históricamente postergados del norte de Santiago.' },
+                { nombre: 'Santiago', pop: '500.000 hab', pobreza: '8.1%', estado: 'Conexión Central', desc: 'Eje neurálgico con múltiples combinaciones y alta población flotante.' },
+                { nombre: 'Ñuñoa', pop: '250.000 hab', pobreza: '3.4%', estado: 'Alta Consolidación', desc: 'Zona residencial de ingresos medios-altos con alta densidad de estaciones.' },
+                { nombre: 'La Reina', pop: '100.000 hab', pobreza: '2.8%', estado: 'Terminal Oriente', desc: 'Conecta el extremo oriente con la red estructurante.' }
+            ],
+            L10: [
+                { nombre: 'Maipú', pop: '520.000 hab', pobreza: '7.3%', estado: 'Extensión Poniente', desc: 'Una de las comunas más populosas; la extensión por Vespucio optimizará su conectividad.' },
+                { nombre: 'Cerrillos', pop: '80.000 hab', pobreza: '8.5%', estado: 'Zona en Desarrollo', desc: 'Alta expansión inmobiliaria y nuevos polos habitacionales.' },
+                { nombre: 'Lo Espejo', pop: '98.000 hab', pobreza: '12.4%', estado: 'Nueva Conexión', desc: 'Comuna con desafíos de integración y alta necesidad de transporte estructurante.' },
+                { nombre: 'La Cisterna', pop: '100.000 hab', pobreza: '9.1%', estado: 'Intermodal Clave', desc: 'Punto estratégico de combinación intermodal sur.' },
+                { nombre: 'San Ramón', pop: '82.000 hab', pobreza: '13.8%', estado: 'Alta Vulnerabilidad', desc: 'Presenta uno de los índices de pobreza por ingresos más altos del trazado.' },
+                { nombre: 'La Granja', pop: '116.000 hab', pobreza: '11.5%', estado: 'Conexión Sur', desc: 'Eje histórico de Vespucio Sur que requiere mejor conectividad transversal.' },
+                { nombre: 'La Florida', pop: '402.000 hab', pobreza: '6.2%', estado: 'Consolidado Oriente-Sur', desc: 'Alta densidad demográfica y articulador del sector suroriente.' }
+            ]
         };
-        let chart2 = new Chart(document.getElementById('canvasChart2').getContext('2d'), {
-            type: 'bar',
-            data: { labels: comunasL10, datasets: [{ label: dataL10.pobrezaIngresos.label, data: dataL10.pobrezaIngresos.values, backgroundColor: dataL10.pobrezaIngresos.color, borderRadius: 6 }] },
-            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-        });
-        function updateChart2() {
-            const v = document.getElementById('variableSelector').value;
-            chart2.data.datasets[0].label = dataL10[v].label;
-            chart2.data.datasets[0].data = dataL10[v].values;
-            chart2.data.datasets[0].backgroundColor = dataL10[v].color;
-            chart2.update();
+
+        function filterLine(linea) {
+            const btnL3 = document.getElementById('btn-l3');
+            const btnL10 = document.getElementById('btn-l10');
+            
+            if(linea === 'L3') {
+                btnL3.className = "px-4 py-2 bg-red-600 text-white font-semibold text-xs rounded-lg transition-all shadow-md";
+                btnL10.className = "px-4 py-2 bg-slate-800 text-slate-300 font-semibold text-xs rounded-lg transition-all border border-slate-700";
+            } else {
+                btnL10.className = "px-4 py-2 bg-red-600 text-white font-semibold text-xs rounded-lg transition-all shadow-md";
+                btnL3.className = "px-4 py-2 bg-slate-800 text-slate-300 font-semibold text-xs rounded-lg transition-all border border-slate-700";
+            }
+            renderComunas(linea);
         }
 
-        // Gráfico 3
-        new Chart(document.getElementById('canvasChart3').getContext('2d'), {
+        function renderComunas(linea) {
+            const container = document.getElementById('comunasContainer');
+            container.innerHTML = '';
+            datosComunas[linea].forEach((c, idx) => {
+                container.innerHTML += `
+                    <div onclick="showDetail('${linea}', ${idx})" class="bg-slate-900 border border-slate-800 hover:border-red-500 p-3 rounded-xl cursor-pointer transition-all text-center">
+                        <span class="text-xs font-bold text-red-400">${linea}</span>
+                        <h4 class="text-sm font-semibold text-white mt-1">${c.nombre}</h4>
+                        <span class="text-[10px] text-slate-400 block mt-1">${c.pop}</span>
+                    </div>
+                `;
+            });
+            showDetail(linea, 0);
+        }
+
+        function showDetail(linea, idx) {
+            const c = datosComunas[linea][idx];
+            document.getElementById('comunaDetail').innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="text-base font-bold text-white">${c.nombre} <span class="text-xs font-normal text-cyan-400 ml-2">(${c.estado})</span></h4>
+                    <span class="text-xs bg-red-950 text-red-300 px-2 py-0.5 rounded border border-red-800">Pobreza: ${c.pobreza}</span>
+                </div>
+                <p class="text-slate-300 text-xs leading-relaxed">${c.desc}</p>
+                <div class="mt-2 text-[11px] text-slate-500">Población total estimada (Censo / INE): <strong>${c.pop}</strong></div>
+            `;
+        }
+
+        // --- DATOS PASO 2: RANKING DINÁMICO ---
+        const rankingData = {
+            poblacion: { label: 'Población Comunal (Habitantes)', values: [520000, 402000, 250000, 210000, 130000, 116000, 100000, 98000, 82000, 80000], labels: ['Maipú', 'La Florida', 'Ñuñoa', 'Quilicura', 'Conchalí', 'La Granja', 'La Cisterna', 'Lo Espejo', 'San Ramón', 'Cerrillos'], color: '#38bdf8' },
+            pobreza: { label: 'Pobreza por Ingresos (%)', values: [13.8, 12.4, 11.5, 9.2, 9.1, 8.5, 8.1, 7.3, 6.5, 3.4], labels: ['San Ramón', 'Lo Espejo', 'La Granja', 'Conchalí', 'La Cisterna', 'Cerrillos', 'Santiago', 'Maipú', 'Quilicura', 'Ñuñoa'], color: '#ef4444' },
+            densidad: { label: 'Densidad (Hab/km²)', values: [13500, 13200, 11900, 11500, 10200, 9800, 3800, 3500, 3100, 2800], labels: ['La Florida', 'Lo Espejo', 'Maipú', 'San Ramón', 'Conchalí', 'La Cisterna', 'Cerrillos', 'Quilicura', 'Ñuñoa', 'La Reina'], color: '#a855f7' }
+        };
+
+        const ctxRanking = document.getElementById('canvasRanking').getContext('2d');
+        let chartRanking = new Chart(ctxRanking, {
             type: 'bar',
             data: {
-                labels: ['Quilicura -> Stgo Centro', 'Conchalí -> Providencia', 'Maipú -> La Florida', 'San Ramón -> Zona Oriente'],
-                datasets: [
-                    { label: 'Tiempo Actual (Bus + Metro)', data: [65, 50, 75, 70], backgroundColor: '#94a3b8', borderRadius: 6 },
-                    { label: 'Tiempo Proyectado', data: [35, 28, 45, 40], backgroundColor: '#0ea5e9', borderRadius: 6 }
-                ]
+                labels: rankingData.poblacion.labels,
+                datasets: [{
+                    label: rankingData.poblacion.label,
+                    data: rankingData.poblacion.values,
+                    backgroundColor: rankingData.poblacion.color,
+                    borderRadius: 6
+                }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } },
+                    y: { grid: { display: false }, ticks: { color: '#f8fafc', font: { size: 11 } } }
+                }
+            }
         });
+
+        function updateRankingChart() {
+            const sel = document.getElementById('varSelectorStep2').value;
+            const d = rankingData[sel];
+            chartRanking.data.labels = d.labels;
+            chartRanking.data.datasets[0].label = d.label;
+            chartRanking.data.datasets[0].data = d.values;
+            chartRanking.data.datasets[0].backgroundColor = d.color;
+            chartRanking.update();
+        }
+
+        // --- DATOS PASO 3: SCATTER PLOT (CRUCE POBLACIÓN VS POBREZA) ---
+        const ctxScatter = document.getElementById('canvasScatter').getContext('2d');
+        new Chart(ctxScatter, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Comunas (Línea 3 y Línea 10)',
+                    data: [
+                        {x: 520, y: 7.3, label: 'Maipú'},
+                        {x: 402, y: 6.2, label: 'La Florida'},
+                        {x: 250, y: 3.4, label: 'Ñuñoa'},
+                        {x: 210, y: 6.5, label: 'Quilicura'},
+                        {x: 130, y: 9.2, label: 'Conchalí'},
+                        {x: 116, y: 11.5, label: 'La Granja'},
+                        {x: 100, y: 9.1, label: 'La Cisterna'},
+                        {x: 98, y: 12.4, label: 'Lo Espejo'},
+                        {x: 82, y: 13.8, label: 'San Ramón'},
+                        {x: 80, y: 8.5, label: 'Cerrillos'}
+                    ],
+                    backgroundColor: '#ef4444',
+                    pointRadius: 8,
+                    pointHoverRadius: 11
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let point = context.raw;
+                                return `${point.label}: ${point.x}k hab. | Pobreza: ${point.y}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        title: { display: true, text: 'Población Comunal (en miles)', color: '#9ca3af', font: { size: 11 } },
+                        grid: { color: '#1f2937' }, ticks: { color: '#9ca3af' } 
+                    },
+                    y: { 
+                        title: { display: true, text: 'Pobreza por Ingresos (%)', color: '#9ca3af', font: { size: 11 } },
+                        grid: { color: '#1f2937' }, ticks: { color: '#9ca3af' } 
+                    }
+                }
+            }
+        });
+
+        // Inicializar vista predeterminada en paso 1
+        filterLine('L3');
     </script>
 </body>
 </html>
