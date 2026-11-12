@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Influye el nivel socioeconómico en la participación cultural juvenil?</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Lora e Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        .editorial-title {
+            font-family: 'Lora', serif;
+        }
+        .bar-transition {
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-activo {
+            background-color: #0ea5e9 !important;
+            color: #ffffff !important;
+            border-color: #38bdf8 !important;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
+
+    <main class="max-w-4xl mx-auto bg-[#111827] border border-slate-800 shadow-2xl rounded-2xl p-6 sm:p-10">
+        
+        <!-- Encabezado del Gráfico -->
+        <header class="border-b border-slate-800 pb-6 mb-6">
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-400 mb-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+                <span>Reportaje de Datos · Brechas Socioeconómicas</span>
+            </div>
+            <h1 class="editorial-title text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight mb-2">
+                ¿Influye el nivel socioeconómico en la participación cultural juvenil?
+            </h1>
+            <p class="text-sm sm:text-base text-slate-400">
+                Comparativa de participación cultural en jóvenes de 15 a 29 años según estrato socioeconómico (2024).
+            </p>
+        </header>
+
+        <!-- Controles Interactivos (Botones de Filtro) -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-8 bg-[#172033] p-2.5 rounded-xl border border-slate-800">
+            <div class="flex flex-wrap gap-2 text-xs font-medium w-full sm:w-auto">
+                <button onclick="cambiarVista('bajo')" id="btn-bajo" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer border border-slate-700">Nivel Bajo</button>
+                <button onclick="cambiarVista('medio')" id="btn-medio" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer border border-slate-700">Nivel Medio</button>
+                <button onclick="cambiarVista('alto')" id="btn-alto" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer border border-slate-700">Nivel Alto</button>
+                <button onclick="cambiarVista('todos')" id="btn-todos" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition cursor-pointer border border-slate-700 btn-activo">Comparar Todos</button>
+            </div>
+            <div class="text-xs text-slate-400 italic px-2">
+                * Haz clic en los botones para interactuar
+            </div>
+        </div>
+
+        <!-- Panel de Visualización Dinámica -->
+        <div id="panel-contenido" class="space-y-6">
+            <!-- El contenido se actualiza interactivamente mediante JavaScript -->
+        </div>
+
+        <!-- Pie de página / Fuente -->
+        <footer class="mt-8 pt-6 border-t border-slate-800 text-xs text-slate-400 italic flex justify-between items-center">
+            <span>Fuente: Encuesta Nacional de Participación Cultural y Comportamiento Lector 2024 (ENPCCL). Elaboración propia.</span>
+            <span id="indicador-estado" class="text-sky-400 font-medium">Modo: Comparación general</span>
+        </footer>
+
+    </main>
+
+    <!-- Motor de Interactividad en JavaScript -->
+    <script>
+        const datos = {
+            bajo: {
+                titulo: "Nivel Socioeconómico Bajo",
+                sub: "Población juvenil perteneciente al estrato socioeconómico bajo",
+                general: 88.9,
+                cine: 71.9,
+                conciertos: 42.1,
+                colorGeneral: "#0ea5e9",
+                colorCine: "#38bdf8",
+                colorConciertos: "#e05638"
+            },
+            medio: {
+                titulo: "Nivel Socioeconómico Medio",
+                sub: "Población juvenil perteneciente al estrato socioeconómico medio",
+                general: 94.9,
+                cine: 82.0,
+                conciertos: 51.1,
+                colorGeneral: "#0ea5e9",
+                colorCine: "#38bdf8",
+                colorConciertos: "#e05638"
+            },
+            alto: {
+                titulo: "Nivel Socioeconómico Alto",
+                sub: "Población juvenil perteneciente al estrato socioeconómico alto",
+                general: 98.8,
+                cine: 93.2,
+                conciertos: 65.1,
+                colorGeneral: "#0ea5e9",
+                colorCine: "#38bdf8",
+                colorConciertos: "#e05638"
+            }
+        };
+
+        function cambiarVista(tipo) {
+            // Actualizar estado visual de los botones
+            ['bajo', 'medio', 'alto', 'todos'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if(t === tipo) {
+                    btn.classList.add('btn-activo');
+                } else {
+                    btn.classList.remove('btn-activo');
+                }
+            });
+
+            const panel = document.getElementById('panel-contenido');
+            const estado = document.getElementById('indicador-estado');
+
+            if(tipo === 'todos') {
+                estado.innerText = "Modo: Comparación simultánea de los 3 niveles";
+                panel.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Tarjeta Bajo -->
+                        <div class="bg-[#172033] border border-slate-800 rounded-xl p-5 card-hover">
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-800 text-sky-400 mb-3 inline-block">Nivel Bajo</span>
+                            <div class="space-y-4 mt-2">
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Participación General</span><span class="font-bold text-sky-400">${datos.bajo.general}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#0ea5e9] h-full rounded-full bar-transition" style="width: ${datos.bajo.general}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Cine</span><span class="font-bold text-sky-300">${datos.bajo.cine}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#38bdf8] h-full rounded-full bar-transition" style="width: ${datos.bajo.cine}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Conciertos</span><span class="font-bold text-[#e05638]">${datos.bajo.conciertos}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#e05638] h-full rounded-full bar-transition" style="width: ${datos.bajo.conciertos}%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Medio -->
+                        <div class="bg-[#172033] border border-slate-800 rounded-xl p-5 card-hover">
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-800 text-sky-400 mb-3 inline-block">Nivel Medio</span>
+                            <div class="space-y-4 mt-2">
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Participación General</span><span class="font-bold text-sky-400">${datos.medio.general}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#0ea5e9] h-full rounded-full bar-transition" style="width: ${datos.medio.general}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Cine</span><span class="font-bold text-sky-300">${datos.medio.cine}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#38bdf8] h-full rounded-full bar-transition" style="width: ${datos.medio.cine}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Conciertos</span><span class="font-bold text-[#e05638]">${datos.medio.conciertos}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#e05638] h-full rounded-full bar-transition" style="width: ${datos.medio.conciertos}%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Alto -->
+                        <div class="bg-[#172033] border border-amber-500/30 rounded-xl p-5 card-hover relative">
+                            <div class="absolute -top-3 right-4 bg-amber-500/20 text-amber-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-amber-500/40">★ Mayor Acceso</div>
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-800 text-sky-400 mb-3 inline-block">Nivel Alto</span>
+                            <div class="space-y-4 mt-2">
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Participación General</span><span class="font-bold text-sky-400">${datos.alto.general}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#0ea5e9] h-full rounded-full bar-transition" style="width: ${datos.alto.general}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Cine</span><span class="font-bold text-sky-300">${datos.alto.cine}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#38bdf8] h-full rounded-full bar-transition" style="width: ${datos.alto.cine}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs text-slate-300 mb-1"><span>Conciertos</span><span class="font-bold text-[#e05638]">${datos.alto.conciertos}%</span></div>
+                                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden"><div class="bg-[#e05638] h-full rounded-full bar-transition" style="width: ${datos.alto.conciertos}%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const d = datos[tipo];
+                estado.innerText = `Mostrando: ${d.titulo}`;
+                panel.innerHTML = `
+                    <div class="bg-[#172033] border border-slate-800 rounded-2xl p-6 sm:p-8 card-hover">
+                        <div class="mb-6">
+                            <h2 class="text-xl font-bold text-slate-100">${d.titulo}</h2>
+                            <p class="text-xs text-slate-400">${d.sub}</p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- Categoría 1: Participación Cultural General -->
+                            <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800">
+                                <div class="flex items-center justify-between text-sm font-medium text-slate-200 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                                        Participación cultural general
+                                    </span>
+                                    <span class="font-bold text-sky-400 text-lg">${d.general}%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-3.5 rounded-full overflow-hidden p-0.5">
+                                    <div class="bg-[#0ea5e9] h-full rounded-full bar-transition shadow-lg shadow-sky-500/20" style="width: ${d.general}%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Categoría 2: Cine -->
+                            <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800">
+                                <div class="flex items-center justify-between text-sm font-medium text-slate-200 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
+                                        Asistencia a Cine
+                                    </span>
+                                    <span class="font-bold text-sky-300 text-lg">${d.cine}%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-3.5 rounded-full overflow-hidden p-0.5">
+                                    <div class="bg-[#38bdf8] h-full rounded-full bar-transition shadow-lg shadow-sky-500/20" style="width: ${d.cine}%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Categoría 3: Conciertos -->
+                            <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800">
+                                <div class="flex items-center justify-between text-sm font-medium text-slate-200 mb-2">
+                                    <span class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#e05638]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                                        Asistencia a Conciertos o Recitales
+                                    </span>
+                                    <span class="font-bold text-[#e05638] text-lg">${d.conciertos}%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-3.5 rounded-full overflow-hidden p-0.5">
+                                    <div class="bg-[#e05638] h-full rounded-full bar-transition shadow-lg shadow-orange-500/20" style="width: ${d.conciertos}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Cargar vista inicial por defecto (Comparar Todos)
+        cambiarVista('todos');
+    </script>
+</body>
+</html>
