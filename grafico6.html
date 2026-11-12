@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entre páginas y pantallas: ¿cómo leen los jóvenes chilenos?</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Lora e Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        .editorial-title {
+            font-family: 'Lora', serif;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        .card-hover {
+            transition: all 0.35s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-3px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.1);
+        }
+        /* Donut Chart Conic Gradient con animación de carga */
+        .donut-chart {
+            background: conic-gradient(
+                #0ea5e9 0deg 68.76deg,     /* Diariamente 19.1% */
+                #38bdf8 68.76deg 162.36deg, /* 1 vez por semana 26.0% */
+                #818cf8 162.36deg 236.16deg,/* 1 vez por mes 20.5% */
+                #e05638 236.16deg 317.16deg,/* No lee libros 22.5% */
+                #475569 317.16deg 360deg    /* Otras frecuencias 11.9% */
+            );
+            transition: transform 0.5s ease;
+        }
+        .donut-chart:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+
+    <main class="max-w-5xl w-full bg-[#111827] border border-slate-800 shadow-2xl rounded-2xl p-6 sm:p-10">
+        
+        <!-- Encabezado de la Infografía -->
+        <header class="border-b border-slate-800 pb-6 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-400 mb-2">
+                    <!-- Icono Libro Animado -->
+                    <svg class="w-4 h-4 floating-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    <span>Infografía Interactiva · Hábitos de Lectura</span>
+                </div>
+                <h1 class="editorial-title text-2xl sm:text-3xl font-semibold text-slate-100 tracking-tight mb-2">
+                    Entre páginas y pantallas: ¿cómo leen los jóvenes chilenos?
+                </h1>
+                <p class="text-sm sm:text-base text-slate-400">
+                    Frecuencia de lectura y formatos preferidos por jóvenes de 15 a 29 años.
+                </p>
+            </div>
+            <!-- Íconos decorativos flotantes -->
+            <div class="hidden md:flex items-center gap-3 text-sky-400/80 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                <svg class="w-6 h-6 floating-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <svg class="w-6 h-6 floating-icon" style="animation-delay: 0.5s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <svg class="w-6 h-6 floating-icon" style="animation-delay: 1s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+            </div>
+        </header>
+
+        <!-- Contenedor Principal en 2 Secciones (Grid 16:9) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            <!-- SECCIÓN IZQUIERDA: Gráfico de Dona (Frecuencia de Lectura) -->
+            <div class="lg:col-span-6 bg-[#172033] border border-slate-800 rounded-2xl p-6 card-hover">
+                <h2 class="text-lg font-semibold text-slate-100 mb-1 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                    Frecuencia de lectura de libros
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Distribución porcentual de los hábitos de lectura juvenil</p>
+
+                <!-- Gráfico de Dona Visual (Conic Gradient) y Leyenda -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6 my-4">
+                    <!-- Dona CSS -->
+                    <div class="relative w-48 h-48 rounded-full donut-chart shadow-xl flex items-center justify-center shrink-0">
+                        <div class="absolute w-28 h-28 bg-[#111827] rounded-full flex flex-col items-center justify-center text-center p-2">
+                            <span class="text-[10px] uppercase tracking-wider text-slate-400">Total</span>
+                            <span class="text-sm font-bold text-slate-100">100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Leyenda Detallada -->
+                    <div class="space-y-2.5 text-xs w-full">
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-sm bg-[#0ea5e9] shrink-0"></span>
+                                <span class="text-slate-300">Diariamente</span>
+                            </div>
+                            <span class="font-bold text-sky-400">19,1%</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-sm bg-[#38bdf8] shrink-0"></span>
+                                <span class="text-slate-300">Al menos 1 vez por semana</span>
+                            </div>
+                            <span class="font-bold text-sky-300">26,0%</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-sm bg-[#818cf8] shrink-0"></span>
+                                <span class="text-slate-300">Al menos 1 vez por mes</span>
+                            </div>
+                            <span class="font-bold text-indigo-400">20,5%</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-sm bg-[#e05638] shrink-0"></span>
+                                <span class="text-slate-300">No lee libros</span>
+                            </div>
+                            <span class="font-bold text-[#e05638]">22,5%</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-sm bg-[#475569] shrink-0"></span>
+                                <span class="text-slate-300">Otras frecuencias / respuestas</span>
+                            </div>
+                            <span class="font-bold text-slate-400">11,9%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN DERECHA: Tres Indicadores Circulares (Formatos de Lectura) -->
+            <div class="lg:col-span-6 space-y-4">
+                <div class="bg-[#172033] border border-slate-800 rounded-2xl p-5">
+                    <h2 class="text-lg font-semibold text-slate-100 mb-1 flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                        Formatos utilizados (lectores de libros)
+                    </h2>
+                    <p class="text-xs text-slate-400">Porcentajes independientes (admite múltiples respuestas simultáneas)</p>
+                </div>
+
+                <!-- 1. Papel (74,8%) -->
+                <div class="bg-[#172033] border border-slate-800 rounded-xl p-4 card-hover flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+                            <!-- Icono Libro Papel -->
+                            <svg class="w-5 h-5 floating-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold block">Soporte Tradicional</span>
+                            <span class="text-sm font-bold text-slate-100">Libro en papel</span>
+                        </div>
+                    </div>
+                    <!-- Indicador Circular Numérico -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden w-24 sm:w-32 hidden sm:block">
+                            <div class="bg-[#0ea5e9] h-full rounded-full" style="width: 74.8%;"></div>
+                        </div>
+                        <span class="text-xl font-bold text-sky-400">74,8%</span>
+                    </div>
+                </div>
+
+                <!-- 2. Digital (58,1%) -->
+                <div class="bg-[#172033] border border-slate-800 rounded-xl p-4 card-hover flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+                            <!-- Icono Dispositivo Digital -->
+                            <svg class="w-5 h-5 floating-icon" style="animation-delay: 0.3s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold block">Soporte Electrónico</span>
+                            <span class="text-sm font-bold text-slate-100">Formato digital (PDF, E-reader)</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden w-24 sm:w-32 hidden sm:block">
+                            <div class="bg-[#38bdf8] h-full rounded-full" style="width: 58.1%;"></div>
+                        </div>
+                        <span class="text-xl font-bold text-sky-300">58,1%</span>
+                    </div>
+                </div>
+
+                <!-- 3. Audiolibros (8,1%) -->
+                <div class="bg-[#172033] border border-slate-800 rounded-xl p-4 card-hover flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-[#e05638] shrink-0">
+                            <!-- Icono Audiolibro / Audífonos -->
+                            <svg class="w-5 h-5 floating-icon" style="animation-delay: 0.6s;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold block">Formato Auditivo</span>
+                            <span class="text-sm font-bold text-slate-100">Audiolibros</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden w-24 sm:w-32 hidden sm:block">
+                            <div class="bg-[#e05638] h-full rounded-full" style="width: 8.1%;"></div>
+                        </div>
+                        <span class="text-xl font-bold text-[#e05638]">8,1%</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Pie de página / Fuente -->
+        <footer class="mt-8 pt-6 border-t border-slate-800 text-xs text-slate-400 italic flex justify-between items-center">
+            <span>Fuente: ENPCCL 2024. Elaboración propia.</span>
+            <span class="text-slate-500">Reportaje: Entre pantallas y escenarios</span>
+        </footer>
+
+    </main>
+
+</body>
+</html>
